@@ -3,7 +3,7 @@ import requests
 import time
 
 # ✅ 환경변수에서 정보 가져오기 (GitHub Secrets에서 설정)
-USDT_CONTRACT_ADDRESS = "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+USDT_CONTRACT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
 WALLET_ADDRESS = os.environ['WALLET_ADDRESS']
 TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 CHAT_ID = os.environ['CHAT_ID']
