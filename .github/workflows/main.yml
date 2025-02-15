@@ -15,5 +15,6 @@ jobs:
 
       - name: Run bot
         env:
-          WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
-        run: python main.py
+  WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
+  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+  CHAT_ID: ${{ secrets.CHAT_ID }}
