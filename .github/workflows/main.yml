@@ -31,7 +31,4 @@ jobs:
           WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: |
-          echo "🟢 USDT 모니터링 봇 실행 시작!"
-          python main.py
-          echo "🛑 USDT 모니터링 봇 실행 종료!"
+        run: python main.py
