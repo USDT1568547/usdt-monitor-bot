@@ -1,20 +1,37 @@
+name: USDT Monitor Bot
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # 매 5분마다 실행
+  workflow_dispatch:  # 수동 실행 가능
+
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: ✅ Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: 📦 Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "⚠️ requirements.txt 파일이 없습니다."
+          fi
 
-      - name: Run bot
+      - name: 🚀 Run bot
         env:
-  WALLET_ADDRESS: "YOUR_WALLET_ADDRESS"
-  TELEGRAM_BOT_TOKEN: "YOUR_TELEGRAM_BOT_TOKEN"
-  CHAT_ID: "YOUR_CHAT_ID"
+          WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          echo "🟢 USDT 모니터링 봇 실행 시작!"
+          python main.py
+          echo "🛑 USDT 모니터링 봇 실행 종료!"
