@@ -33,21 +33,22 @@ def check_usdt_deposit(wallet_address):
         if tx.get('contractType') == 'TriggerSmartContract':
             token_info = tx.get('tokenInfo', {})
             if token_info.get('address') == USDT_CONTRACT_ADDRESS:
-                receiver = tx.get('transferToAddress')  # 수신자 주소
+                receiver = tx.get('toAddress')  # 수신자 주소
                 sender = tx.get('ownerAddress')  # 발신자 주소
                 amount = int(tx.get('amount', 0)) / 1_000_000  # USDT 단위 변환
                 
-                # 내 지갑으로 들어온 트랜잭션인지 확인
-                if receiver.lower() == wallet_address.lower():
-                    message = (
-                        f"🚀 [USDT 입금 감지] 🚀\n\n"
-                        f"📌 보낸 주소: {sender}\n"
-                        f"💰 입금 금액: {amount} USDT\n"
-                        f"🔍 확인 링크: https://tronscan.org/#/address/{wallet_address}"
-                    )
-                    send_telegram_alert(message)
+                # 입금 금액이 0이 아닌 경우에만 알림 전송
+                if amount > 0:
+                    # 내 지갑으로 들어온 트랜잭션인지 확인 (대소문자 구분없이)
+                    if receiver.lower() == wallet_address.lower():
+                        message = (
+                            f"🚀 [USDT 입금 감지] 🚀\n\n"
+                            f"📌 보낸 주소: {sender}\n"
+                            f"💰 입금 금액: {amount} USDT\n"
+                            f"🔍 확인 링크: https://tronscan.org/#/address/{wallet_address}"
+                        )
+                        send_telegram_alert(message)
 
-# ✅ 텔레그램 메시지 전송 함수
 def send_telegram_alert(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     params = {"chat_id": CHAT_ID, "text": message}
@@ -62,6 +63,7 @@ def send_telegram_alert(message):
         print("✅ 알림 전송 성공")
     except requests.RequestException as e:
         print(f"⚠️ 텔레그램 메시지 전송 실패: {e}")
+
 
 # ✅ 10초마다 실행 (주기적 모니터링)
 if __name__ == "__main__":
