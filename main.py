@@ -8,6 +8,11 @@ WALLET_ADDRESS = os.getenv('WALLET_ADDRESS')
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
 
+# ✅ 환경 변수 확인
+print("WALLET_ADDRESS:", WALLET_ADDRESS)
+print("TELEGRAM_BOT_TOKEN:", TELEGRAM_BOT_TOKEN)
+print("CHAT_ID:", CHAT_ID)
+
 # ✅ USDT 입금 확인 함수
 def check_usdt_deposit(wallet_address):
     url = f'https://apilist.tronscanapi.com/api/transaction?address={wallet_address}&limit=10'
@@ -16,6 +21,10 @@ def check_usdt_deposit(wallet_address):
         response = requests.get(url, timeout=5)
         response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
         data = response.json()
+        
+        # API 응답 출력 (디버깅용)
+        print("API 응답:", data)
+
     except requests.RequestException as e:
         print(f"⚠️ API 요청 실패: {e}")
         return
@@ -46,6 +55,10 @@ def send_telegram_alert(message):
     try:
         response = requests.get(url, params=params, timeout=5)
         response.raise_for_status()  # HTTP 오류 체크
+        
+        # 텔레그램 메시지 응답 출력 (디버깅용)
+        print("텔레그램 응답:", response.text)
+        
         print("✅ 알림 전송 성공")
     except requests.RequestException as e:
         print(f"⚠️ 텔레그램 메시지 전송 실패: {e}")
@@ -55,4 +68,4 @@ if __name__ == "__main__":
     print("🚀 USDT 모니터링 봇 시작!")
     while True:
         check_usdt_deposit(WALLET_ADDRESS)
-        time.sleep(10)
+        time.sleep(30)  # 10초에서 30초로 간격 조정
